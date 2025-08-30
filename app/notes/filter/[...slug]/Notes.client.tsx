@@ -11,8 +11,13 @@ import { useDebouncedCallback } from "use-debounce";
 import Modal from "@/components/Modal/Modal";
 import NoteForm from "@/components/NoteForm/NoteForm";
 import { Toaster } from "react-hot-toast";
+import { NoteTag } from "@/types/note";
 
-function NotesClient() {
+interface NotesClientProps {
+  tag?: NoteTag;
+}
+
+function NotesClient({ tag }: NotesClientProps) {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchInput, setSearchInput] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
@@ -26,9 +31,9 @@ function NotesClient() {
   const perPage = 12;
 
   const { data } = useQuery({
-    queryKey: ["notes", currentPage, searchQuery],
+    queryKey: ["notes", currentPage, searchQuery, tag],
     queryFn: () =>
-      fetchNotes({ page: currentPage, perPage, search: searchQuery }),
+      fetchNotes({ page: currentPage, perPage, search: searchQuery, tag }),
     placeholderData: keepPreviousData,
   });
 
